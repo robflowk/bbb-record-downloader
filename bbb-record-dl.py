@@ -18,6 +18,7 @@ args = parser.parse_args()
 
 hostname = args.hostname[0]
 recording_id = args.recording_id[0]
+custom_dest = hasattr(args, 'dest')
 destination = "./%s" % recording_id if not hasattr(args, 'dest') else args.dest[0]
 
 if hasattr(args, 'log'):
@@ -44,8 +45,12 @@ doc = xml.dom.minidom.parse(metadata_file)
 state = doc.getElementsByTagName("state")[0].firstChild.data
 published_flag = doc.getElementsByTagName("published")[0].firstChild.data
 start_time = int(doc.getElementsByTagName("start_time")[0].firstChild.data)
-end_time = doc.getElementsByTagName("end_time")[0].firstChild.data
-recording_time = datetime.datetime.fromtimestamp(start_time/1000.0)
+end_time = int(doc.getElementsByTagName("end_time")[0].firstChild.data)
+start_time_obj = datetime.datetime.fromtimestamp(start_time / 1000.0)
+end_time_obj = datetime.datetime.fromtimestamp(end_time / 1000.0)
+duration = (end_time - start_time)
+
+meeting_name = doc.getElementsByTagName("meetingName")[0].firstChild.data
 
 if (state != 'published') and (published_flag != 'true'):
     logging.error("Recording is not yet published.")
@@ -79,4 +84,7 @@ else:
     print("\n")
 
 
-os.rename(destination, )
+if not custom_dest:
+    target_name = "%s_%s_%s" % (start_time_obj.strftime("%Y-%m-%d"), meeting_name, duration )
+    os.rename(destination, target_name)
+
