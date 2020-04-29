@@ -1,0 +1,3 @@
+* Refactor to a modular approach - use click
+* download missing metadata files.
+* ffmpeg processing to add audio to deskshare and cut into multiple files according to deskshare.xml
