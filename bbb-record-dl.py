@@ -24,7 +24,7 @@ destination = "./%s" % recording_id if not hasattr(args, 'dest') else args.dest[
 if hasattr(args, 'log'):
     logging.basicConfig(level=logging.INFO)
 
-logging.info("downloading %s from %s", args.hostname, args.recording_id)
+logging.info("downloading %s from %s", args.recording_id, args.hostname)
 
 # 1. checking folder existence
 if not os.path.exists(destination):
